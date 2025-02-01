@@ -1,0 +1,36 @@
+import re
+import hashlib
+
+def check_password_complexity(password):
+    # Проверка длины пароля
+    if len(password) < 8:
+        return "Пароль слишком короткий. Минимальная длина 8 символов."
+    
+    # Проверка наличия прописных и строчных букв
+    if not re.search(r'[A-Z]', password) or not re.search(r'[a-z]', password):
+        return "Пароль должен содержать как прописные, так и строчные буквы."
+    
+    # Проверка наличия цифр
+    if not re.search(r'\d', password):
+        return "Пароль должен содержать цифры."
+    
+    return "Пароль соответствует требованиям."
+
+def hash_password(password):
+    # Хэширование пароля с использованием SHA-256
+    hashed_password = hashlib.sha256(password.encode()).hexdigest()
+    return hashed_password
+
+try:
+    while True:
+        user_password = input("Введите пароль: ")
+        complexity_result = check_password_complexity(user_password)
+        
+        if complexity_result == "Пароль соответствует требованиям.":
+            hashed_password = hash_password(user_password)
+            print(f"Хэш пароля: {hashed_password}")
+            break
+        else:
+            print(complexity_result)
+except KeyboardInterrupt:
+    print("\nПрограмма прервана пользователем.")
